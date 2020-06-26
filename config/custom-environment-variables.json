@@ -1,0 +1,15 @@
+{
+   "server": {
+    "port": "SERVER_PORT",
+    "tz": "TZ"
+  },
+  "security": {
+    "userPoolId":"USER_POOL_ID",
+    "clientId":"CLIENT_ID"  
+  },
+  "apis": {
+    "padron": "PADRON_API_URL",
+    "location": "LOCATION_API_URL",
+    "booking":"BOOKING_API_URL"
+  }
+}

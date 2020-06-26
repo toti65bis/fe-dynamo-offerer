@@ -1,0 +1,15 @@
+{
+  "server": {
+    "port": 3000,
+    "tz": "America/Argentina/Buenos_Aires"
+  },
+  "security": {
+    "userPoolId":"us-east-1_Hz5Dg1WJ2",
+    "clientId":"7vkpu7o6b6gkuiclrplcvo0gb7"  
+  },
+  "apis": {
+    "padron": "",
+    "location": "",
+    "booking":""
+  }
+}

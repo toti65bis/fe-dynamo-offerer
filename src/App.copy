@@ -1,0 +1,24 @@
+import React, {Component } from 'react';
+import './App.css';
+import Home from './containers/Home/Home';
+import NotFound from './containers/NotFound/NotFound';
+import Login from './containers/Login/Login';
+import SignUp from './containers/Login/SignUp';
+
+
+class App extends Component {
+
+
+    render(){
+
+    return (
+       <Home></Home>
+    );
+  }
+}
+
+
+
+
+export default App;
+
