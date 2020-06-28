@@ -1,7 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment, CreateRef} from 'react';
+import ReactDOM from 'react-dom';
 import './Orders.css';
 import DataGrid from '../../components/DataGrid'
-import { html } from "gridjs";
+import { html, h } from "gridjs";
 import Button from '@material-ui/core/Button';
 import DetailModal from '../../components/DetailModal'
 import Dialog from '@material-ui/core/Dialog';
@@ -9,26 +10,48 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import  axios  from 'axios';
+import ReactComponent from '../../components/ReactComponent';
+//import ReactComponent from '../../components/ReactComponent';
 
-class Orders extends Component {
-
+class Orders extends Component  {
+  
  
   constructor(props) {
     super(props);
+    
+   
 
     function email(data) {
       return html(`<a href='mailto:${data}'>Email</a>`);
     }
 
+    function link(data) {
+      return html(`<a href='#' onclick='this.onModalClick(${data})'>Detail</a>`);
+    }
+   
+   
+  
     
     this.state = {
+        //ref: CreateRef(null),
+        data: [],  
         isOpen: false,
-        page: 1,
-        records_per_page: 10,
-        total_records: 0,
-        columns: ['Name', 'Email', 'Phone Number',
-        {name: 'Actions',
-         formatter: (_, row) => email(row.cells[1].data)}],
+        limit: 10,
+        sort: true,
+        pagination: true,
+        search: true,
+        //columns: ['Orden #',{name:'Fecha Alta' , formatter: (_,row) => dateFormater(row.cells[1].data) } , 'Email','DOCUMENTO','Productos','Precio',
+        //'Detalle'],
+        //columns: ['Name', 'Language', 'Released At', 'Artist', {name: 'Actions', formatter: (_,row) => link(row.cells[1].data)}],
+        //columns: ['Order', 'Creada'],
+        columns: [{name:'Orden #', align:'left'},
+        {name:'Fecha Alta', align:'left'},
+        {name:'Email', align:'left'},
+        {name:'Documento', align:'left'},
+        {name:'Productos', align:'left'},
+        {name:'Precio', align:'left'},
+        {name:'Acciones', align:'left'}],
         style: {
           table: {
             border: '3px solid #ccc'
@@ -43,17 +66,12 @@ class Orders extends Component {
             'text-align': 'center'
           }
         },  
-        data: [ 
-                ['John', 'john@example.com', '(353) 01 222 3333', ''],
-                ['Mark', 'mark@gmail.com', '(01) 22 888 4444',  '']
-              ]
-          
-        
-        
       }
 
       this.handleClose = this.handleClose.bind(this);
    }
+
+  
 
   onModalClick()  {
     this.setState({isOpen:true});
@@ -65,28 +83,52 @@ class Orders extends Component {
   };
    
    
+  async fetchOrders()  {
+      const response = await axios.get(process.env.BOOKING_BASE_URL);
+      let result = [];
+      response.data[0].items.map(function(order, index){
+            let products = '';
+            let price = 0;
+            let documento=`${order.customer.identity.type.name}:${order.customer.identity.value}` 
+            order.items.map(function(item, index){
+                products = (products==='')?`${item.product.code}`:`${products},${item.product.code}`;
+                price = price + item.price.amount; 
+            })  
+            result.push(
+              {id: order.id, 
+                created_at: order.created_at, 
+                email:order.customer.email, 
+                document: documento, 
+                products: products, 
+                price: price, actions:''});
 
-  componentDidMount() {
-
-    
-    this.setState({
-        data: [
-        ['John', 'john@example.com', '(353) 01 222 3333', ''],
-        ['Mark', 'mark@gmail.com', '(01) 22 888 4444',  '']
-      ]
-    });
-    
-
-   
-
+           
+      
+          });
+      this.setState({data: result
+          })    
   }
+  
+
+  async componentDidMount() {
+      await this.fetchOrders();
+  }    
 
   
   render() {
     return (
     <div>
            <h1>This is Orders</h1> 
-           <DataGrid columns={this.state.columns} data={this.state.data}  style={this.state.style}></DataGrid>
+           <DataGrid 
+           columns={this.state.columns} 
+           data={this.state.data}  
+           style={this.state.style} 
+           sort={this.state.sort}
+           search={this.state.search}
+           pagination={this.state.pagination}
+           limit={this.state.limit} 
+           > 
+           </DataGrid>
            {/* <DetailModal isOpen={this.state.isOpen}></DetailModal> */}
            <Dialog
         open={this.state.isOpen}

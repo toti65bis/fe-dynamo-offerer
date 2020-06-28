@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { loginRequest } from "../../actions";
@@ -54,6 +54,15 @@ const Login = props => {
     
     
   };
+
+
+  useEffect(() => {
+       
+        console.log("ESTOY EN USEEFFECT",props.user);
+        if(props.user && props.user.idToken){
+         
+        }
+  });
 
   return (
     <>

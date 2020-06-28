@@ -1,51 +1,110 @@
-import React , {useRef, useEffect, Fragment, useState} from 'react';
-import { Grid, html } from "gridjs";
-import 'gridjs/dist/theme/mermaid.css'
-import Button from '@material-ui/core/Button';
-import DetailModal from '../components/DetailModal'
+import React from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: '#ff5722',
+    color: theme.palette.common.white,
+    fontWeight: 'bold' 
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
 
-const DataGrid = (props) => {
+const dateFormater = (isoDate) => {
+  let date = new Date(isoDate);
+  let year = date.getFullYear();
+  let month = date.getMonth()+1;
+  let dt = date.getDate();
 
-    const wrapperRef = useRef(null);
-    
-    const [isOpen, setOpen] = useState(false);
+  if (dt < 10) {
+    dt = '0' + dt;
+  }
+  if (month < 10) {
+    month = '0' + month;
+  }
+  return dt+'/'+month+'/'+year;
+};
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 700,
+  },
+});
+
+export default function CustomizedTables(props) {
+  const classes = useStyles();
+  const names = []; 
+  const aligns = []; 
   
-    
-   
-    useEffect(() => {
+  props.columns.map(function(row, index){
+      names[index] = row.name;
+      aligns[index] = row.align;
+  })
 
-       
-       
-        const dataToRender = []
-       
-        /*
-        props.data.map(function (record, index){
-             record.detail = thisIsMyCopy;
-             dataToRender.push(thisIsMyCopy(record[1]));
-        });
-        */
-        console.log("Estado antes del grid",dataToRender);    
+  props.data.map(function(row, index){
+    console.log("ROWS", row[index]);
+  })
 
-        const grid = new Grid({
-            columns:  props.columns,
-            data: props.data,
-            pagination: { limit: 10},
-            sort: true,
-            search: true,
-            style: props.style
-          });
-
-        grid.render(wrapperRef.current);
-      });
-
-      return (<div>
-     <div ref={wrapperRef} /> 
-    
-     
-      </div>
-      );
-}    
-  
-export default DataGrid;
+  return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="customized table">
+        <TableHead>
+           <TableRow>
+            <StyledTableCell align={aligns[0]}>{names[0]}</StyledTableCell>
+            <StyledTableCell align={aligns[1]}>{names[1]}</StyledTableCell>
+            <StyledTableCell align={aligns[2]}>{names[2]}</StyledTableCell>
+            <StyledTableCell align={aligns[3]}>{names[3]}</StyledTableCell>
+            <StyledTableCell align={aligns[4]}>{names[4]}</StyledTableCell>
+            <StyledTableCell align={aligns[5]}>{names[5]}</StyledTableCell>
+            <StyledTableCell align={aligns[6]}>{names[6]}</StyledTableCell>
+          </TableRow> 
+         
+            
+        </TableHead>
+        <TableBody>
+          {props.data.map((row, index) => (
+            <StyledTableRow key={index}>
+              <StyledTableCell align="left">{row.id}</StyledTableCell>
+              <StyledTableCell align="left">{dateFormater(row.created_at)}</StyledTableCell>
+              <StyledTableCell align="left">{row.email}</StyledTableCell>
+              <StyledTableCell align="left">{row.document}</StyledTableCell>
+              <StyledTableCell align="left">{row.products}</StyledTableCell>
+              <StyledTableCell align="left">{row.price}</StyledTableCell>
+              <StyledTableCell align="left">{row.actions}</StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}

@@ -11,6 +11,7 @@ import { Account, AccountContext } from './components/Accounts';
 import UserPool from './components/UserPool';
 import { loginRequest } from "./actions";
 import { connect } from 'react-redux';
+import ReactComponent from './components/ReactComponent';
 
 class App extends Component {
 
