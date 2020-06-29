@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -99,10 +99,10 @@ export default function CustomizedTables(props) {
 
   
 
-  const [page, setPage] = React.useState(0);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [orderData, setOrderData] = React.useState({});
-  const [productData, setProductData] = React.useState([{
+  const [page, setPage] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [orderData, setOrderData] = useState({});
+  const [productData, setProductData] = useState([{
         code:'1',
         title:'Plan 1',
         price:999,
@@ -114,13 +114,24 @@ export default function CustomizedTables(props) {
   };
 
   function fillProducts(items){
-      
-      items.map(function(item,index){
+      console.log("items", items);
+
+      useEffect(() => {
+          // Should not ever set state during rendering, so do this in useEffect instead.
+          setProductData(items);
+      }, []);
+
+      /*items.map(function(item,index){
             setProductData(state => [...state, 
-              {code:item.product.code,title:item.product.title,price:item.product.price.amount, currency:item.product.price.currency.iso_code}
+              {
+                  code:item.product.code,
+                  title:item.product.title,
+                  price:item.product.price.amount,
+                  currency:item.product.price.currency.iso_code
+              }
             ]);
         }
-      )
+      )*/
       console.log("products",productData);
     };
       
@@ -223,25 +234,25 @@ export default function CustomizedTables(props) {
                                 icon={<AttachMoneyIcon />}
                               />
                               </ListItem>
-                             
-                            </List>
-                            {productData.map(function(product,index){
 
-                                {product}
-                               /*  <ListItem>
+                            </List>
+
+                            {productData.map( (product,index) => (
+
+                               <ListItem>
                                     <ListItemText primary={product.title} secondary={product.code}>
 
                                     </ListItemText>
                                     <Chip
-                                avatar={<Avatar>{'ARS'}</Avatar>}
-                                label={product.price}
-                                color={'primary'}
-                                deleteIcon={<AttachMoneyIcon />}
-                              />
-                                <Divider variant={'inset'} component={'li'} />
-                                </ListItem> */
-                               
-                             })}
+                                        avatar={<Avatar>{'ARS'}</Avatar>}
+                                        label={product.price}
+                                        color={'primary'}
+                                        deleteIcon={<AttachMoneyIcon />}
+                                      />
+                                        <Divider variant={'inset'} component={'li'} />
+                                </ListItem>
+
+                            ))}
                              
                         
                       </Paper>
