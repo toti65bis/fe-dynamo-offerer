@@ -4,10 +4,11 @@ import './Orders.css';
 import DataGrid from '../../components/DataGrid'
 import { html, h } from "gridjs";
 import Button from '@material-ui/core/Button';
-
 import  axios  from 'axios';
-import ReactComponent from '../../components/ReactComponent';
-//import ReactComponent from '../../components/ReactComponent';
+import DetailModal from '../../components/DetailModal';
+
+
+
 
 class Orders extends Component  {
   
@@ -16,7 +17,7 @@ class Orders extends Component  {
     super(props);
     
    
-
+    
     function email(data) {
       return html(`<a href='mailto:${data}'>Email</a>`);
     }
@@ -37,6 +38,7 @@ class Orders extends Component  {
         pagination: true,
         search: true,
         page:1,
+        order: {},
         //columns: ['Orden #',{name:'Fecha Alta' , formatter: (_,row) => dateFormater(row.cells[1].data) } , 'Email','DOCUMENTO','Productos','Precio',
         //'Detalle'],
         //columns: ['Name', 'Language', 'Released At', 'Artist', {name: 'Actions', formatter: (_,row) => link(row.cells[1].data)}],
@@ -69,9 +71,14 @@ class Orders extends Component  {
 
   
 
-  onModalClick()  {
-    this.setState({isOpen:true});
-  }
+  async onModalClick(id)  {
+    const response = await axios.get(`http://localhost:3000/order/${id}`);
+    this.setState((state, props) => ({
+        order: response.data,
+        isOpen: true
+    }));
+  }    
+         
 
   handleClose()  {
     
@@ -124,8 +131,11 @@ class Orders extends Component  {
            pagination={this.state.pagination}
            limit={this.state.limit} 
            page ={this.state.page}
+           onModalClick={this.onModalClick.bind(this)}
            > 
            </DataGrid>
+           <DetailModal isOpen={this.state.isOpen}  handleClose={this.handleClose.bind(this)}  order={this.state.order}></DetailModal> 
+
           
     </div>
     );

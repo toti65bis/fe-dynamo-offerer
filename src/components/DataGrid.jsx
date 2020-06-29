@@ -27,6 +27,8 @@ import Chip from '@material-ui/core/Chip';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Avatar from '@material-ui/core/Avatar';
 
+
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: '#ff5722',
@@ -115,11 +117,11 @@ export default function CustomizedTables(props) {
 
   function fillProducts(items){
       console.log("items", items);
-
-      useEffect(() => {
+    
+      //useEffect(() => {
           // Should not ever set state during rendering, so do this in useEffect instead.
-          setProductData(items);
-      }, []);
+          //setProductData(items);
+      //}, []);
 
       /*items.map(function(item,index){
             setProductData(state => [...state, 
@@ -189,7 +191,7 @@ export default function CustomizedTables(props) {
                 <StyledTableCell align="left">{row.document}</StyledTableCell>
                 <StyledTableCell align="left">{row.products}</StyledTableCell>
                 <StyledTableCell align="left">{row.price}</StyledTableCell>
-                <StyledTableCell align="left"><EditIcon onClick={() => onModalClick(row.id)}></EditIcon></StyledTableCell>
+                <StyledTableCell align="left"><EditIcon onClick={() => props.onModalClick(row.id)}></EditIcon></StyledTableCell>
                 
                 
               </StyledTableRow>
@@ -207,76 +209,7 @@ export default function CustomizedTables(props) {
       onChangeRowsPerPage={handleChangeRowsPerPage}
       />
 
-    <Dialog
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <Paper elevation={3}>
-          <DialogTitle id="responsive-dialog-title">
-                  {`Orden #${orderData.id}`}
-          </DialogTitle>
-          <DialogContent>
-                     <Grid container spacing={2}>
-                     <Grid item xs={12}>
-                        <Paper className={classes.paper}>
-                            Productos
-                        
-                            <List>
-                              <ListItem>
-                                <ListItemText primary="Plan 1" secondary="1">
-
-                                </ListItemText>
-                                <Chip
-                                avatar={<Avatar>{'ARS'}</Avatar>}
-                                label="1200"
-                                color={'primary'}
-                                icon={<AttachMoneyIcon />}
-                              />
-                              </ListItem>
-
-                            </List>
-
-                            {productData.map( (product,index) => (
-
-                               <ListItem>
-                                    <ListItemText primary={product.title} secondary={product.code}>
-
-                                    </ListItemText>
-                                    <Chip
-                                        avatar={<Avatar>{'ARS'}</Avatar>}
-                                        label={product.price}
-                                        color={'primary'}
-                                        deleteIcon={<AttachMoneyIcon />}
-                                      />
-                                        <Divider variant={'inset'} component={'li'} />
-                                </ListItem>
-
-                            ))}
-                             
-                        
-                      </Paper>
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                      <Paper className={classes.paper}>Titular</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Paper className={classes.paper}>Vendedor</Paper>
-                    </Grid>
-                     </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
-          </DialogActions> 
-
-        </Paper>
-  
-      </Dialog>
+    
     </Paper>
   );
 }
