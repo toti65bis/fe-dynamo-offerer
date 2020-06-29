@@ -4,12 +4,7 @@ import './Orders.css';
 import DataGrid from '../../components/DataGrid'
 import { html, h } from "gridjs";
 import Button from '@material-ui/core/Button';
-import DetailModal from '../../components/DetailModal'
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 import  axios  from 'axios';
 import ReactComponent from '../../components/ReactComponent';
 //import ReactComponent from '../../components/ReactComponent';
@@ -41,6 +36,7 @@ class Orders extends Component  {
         sort: true,
         pagination: true,
         search: true,
+        page:1,
         //columns: ['Orden #',{name:'Fecha Alta' , formatter: (_,row) => dateFormater(row.cells[1].data) } , 'Email','DOCUMENTO','Productos','Precio',
         //'Detalle'],
         //columns: ['Name', 'Language', 'Released At', 'Artist', {name: 'Actions', formatter: (_,row) => link(row.cells[1].data)}],
@@ -127,31 +123,10 @@ class Orders extends Component  {
            search={this.state.search}
            pagination={this.state.pagination}
            limit={this.state.limit} 
+           page ={this.state.page}
            > 
            </DataGrid>
-           {/* <DetailModal isOpen={this.state.isOpen}></DetailModal> */}
-           <Dialog
-        open={this.state.isOpen}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={this.handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={this.handleClose} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
-           <Button onClick={() => this.onModalClick()}>Modal</Button>
+          
     </div>
     );
   }
