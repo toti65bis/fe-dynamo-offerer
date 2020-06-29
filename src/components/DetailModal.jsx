@@ -105,9 +105,22 @@ export default function ResponsiveDialog(props) {
 
                             </List> */}
 
-                            {  console.log(props.order.items)}
-{/* 
-                          {props.order.items.map( (product,index) => (
+                            {  console.log("ORDER: ",props.order.items)}
+                            {
+                                (props.order.items) && (
+                                    props.order.items.map( item => (
+                                        /*<p>TITULO: {item.product.title}</p>*/
+                                        <ListItem>
+                                            <ListItemText primary={item.product.title} secondary={item.product.code} />
+
+                                            <Divider variant={'inset'} component={'li'} />
+                                        </ListItem>
+                                    ))
+                                )
+                            }
+                          {/*{
+
+                              props.order.items.map( (product,index) => (
 
                                 <ListItem>
                                       <ListItemText primary={product.title} secondary={product.code}>
@@ -121,7 +134,8 @@ export default function ResponsiveDialog(props) {
                                         />
                                           <Divider variant={'inset'} component={'li'} />
                                   </ListItem>
-                            ))}  */}
+                            ))
+                          }*/}
                              
                         
                       </Paper>
