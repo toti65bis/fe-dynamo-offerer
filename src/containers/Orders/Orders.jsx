@@ -109,7 +109,7 @@ class Orders extends Component  {
    
    
   async fetchOrders()  {
-      const response = await axios.get(`${process.env.BOOKING_BASE_URL}?pagelen=${this.state.limit}&page=${this.state.pagination_filter}&status=ENTERED`);
+      const response = await axios.get(`${process.env.BOOKING_BASE_URL}?pagelen=${this.state.limit}&page=${this.state.pagination_filter}&status=ENTERED&sort=-id`);
       this.setState((state, props) => ({
         page_next: response.data.next,
         page_prev: response.data.prev,

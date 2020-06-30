@@ -172,10 +172,10 @@ export default function ResponsiveDialog(props) {
                                           </ListItemText>
                                       </ListItem>
                                       <Divider variant={'inset'} component={'li'} />
-                                    {/*   <ListItem>
-                                          <ListItemText primary={(props.order.customer.identity)?props.order.customer.identity.value:''} secondary={(props.order.customer)?props.order.customer.identity.type.name:''}>
+                                    { <ListItem>
+                                          <ListItemText primary={(props.order.customer)?props.order.customer.identity.value:''} secondary={(props.order.customer)?props.order.customer.identity.type.name:''}>
                                           </ListItemText>
-                                      </ListItem> */}
+                                      </ListItem> }
                                       <Divider variant={'inset'} component={'li'} />
                                       <ListItem>
                                           <ListItemText primary={`${(props.order.customer)?props.order.customer.email:''}`} secondary={'Email'}>
