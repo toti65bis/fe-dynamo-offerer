@@ -6,9 +6,15 @@ import { html, h } from "gridjs";
 import Button from '@material-ui/core/Button';
 import  axios  from 'axios';
 import DetailModal from '../../components/DetailModal';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import orderBy from "lodash/orderBy";
 
-
-
+const invertDirection = {
+  asc: "desc",
+  desc: "asc"
+};
 
 class Orders extends Component  {
   
@@ -18,7 +24,10 @@ class Orders extends Component  {
     
     
     this.state = {
-        //ref: CreateRef(null),
+        columnToSort: "",
+        sortDirection: "desc",
+        query:'',
+        columnToQuery:'document',
         pag_next:'',
         pag_prev:'',
         total_items:0,
@@ -100,9 +109,7 @@ class Orders extends Component  {
    
    
   async fetchOrders()  {
-      console.log('PAGINATION FILTER', this.state.pagination_filter )
       const response = await axios.get(`${process.env.BOOKING_BASE_URL}?pagelen=${this.state.limit}&page=${this.state.pagination_filter}&status=ENTERED`);
-      
       this.setState((state, props) => ({
         page_next: response.data.next,
         page_prev: response.data.prev,
@@ -157,14 +164,59 @@ class Orders extends Component  {
      
   }    
 
+
+  handleChange = value => {
+    this.setState({columnToQuery: value}
+      , async () => {
+      await this.fetchOrders();
+    });
+  };
+
   
   render() {
+    const lowerCaseQuery = this.state.query.toLowerCase();
     return (
     <div>
-           <h1>Ordenes Ingresadas</h1> 
-          <DataGrid 
+           <h1>Ordenes Ingresadas</h1>
+           <Select
+                style={{ marginLeft: "1em" , paddingTop: "1em"}}
+                label="Buscar..."
+                placeholder="Buscar..."
+                value={this.state.columnToQuery}
+                onChange={(event, index, value) =>
+                  this.setState({ columnToQuery: event.target.value }, function(){
+                     console.log("CAMBIO EL ESTADO", this.state.columnToQuery )
+           
+                  })
+                }
+              >
+               
+                <MenuItem value='document' >Documento</MenuItem>
+                <MenuItem value='email' >Email</MenuItem>
+                <MenuItem value='price' >Precio</MenuItem>
+                <MenuItem value='products' >Productos</MenuItem>
+                <MenuItem value='created_at' >Fecha Alta</MenuItem>
+              </Select>
+           <TextField
+              id="standard-textarea"
+              label="Buscar..."
+              placeholder="Buscar..."
+              value={this.state.query}
+              onChange={e => this.setState({ query: e.target.value })}
+              multiline 
+              style={{marginBottom:"1em" , marginLeft: "1em"}}
+              floatingLabelFixed
+          /> 
+            
+          <DataGrid
+           handleSort={this.handleSort}
+           sortDirection={this.state.sortDirection} 
            columns={this.state.columns} 
-           data={this.state.data}  
+           data= {this.state.query
+           ? this.state.data.filter(x => (x[this.state.columnToQuery]) ?
+                    x[this.state.columnToQuery].includes(this.state.query): null
+             )
+           : this.state.data}
            style={this.state.style} 
            sort={this.state.sort}
            search={this.state.search}
