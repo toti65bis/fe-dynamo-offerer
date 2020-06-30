@@ -99,7 +99,6 @@ export default function CustomizedTables(props) {
   const names = []; 
   const aligns = []; 
 
-  
 
   const [page, setPage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -111,9 +110,7 @@ export default function CustomizedTables(props) {
         currency:'ARS',
   }]);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+
 
   function fillProducts(items){
       console.log("items", items);
@@ -152,10 +149,6 @@ export default function CustomizedTables(props) {
     setIsOpen(false);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
   
   props.columns.map(function(row, index){
       names[index] = row.name;
@@ -163,7 +156,13 @@ export default function CustomizedTables(props) {
   })
 
 
-  
+  const handelPageChange = (event, newPage) => {
+      props.handleChangePage(newPage);
+  };
+
+  const changeLimit = (newLimit) => {
+      props.handleChangeRowsPerPage(newLimit);
+  }
 
   return (
     <Paper>
@@ -200,13 +199,13 @@ export default function CustomizedTables(props) {
         </Table>
       </TableContainer>
       <TablePagination
-      rowsPerPageOptions={[10, 25, 100]}
-      component="div"
-      count={props.data.length}
-      rowsPerPage={props.limit}
-      page={props.page}
-      onChangePage={handleChangePage}
-      onChangeRowsPerPage={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 15, 25, 50, 75, 100]}
+          component="div"
+          count={props.total_items}
+          rowsPerPage={(props.limit)?props.limit:10}
+          page={props.page}
+          onChangePage={handelPageChange}
+          onChangeRowsPerPage={changeLimit}
       />
 
     

@@ -16,28 +16,20 @@ class Orders extends Component  {
   constructor(props) {
     super(props);
     
-   
-    
-    function email(data) {
-      return html(`<a href='mailto:${data}'>Email</a>`);
-    }
-
-    function link(data) {
-      return html(`<a href='#' onclick='this.onModalClick(${data})'>Detail</a>`);
-    }
-   
-   
-  
     
     this.state = {
         //ref: CreateRef(null),
+        pag_next:'',
+        pag_prev:'',
+        total_items:0,
         data: [],  
         isOpen: false,
         limit: 10,
         sort: true,
         pagination: true,
         search: true,
-        page:1,
+        pagination_filter:1,
+        pagination_page:0,
         order: {},
         //columns: ['Orden #',{name:'Fecha Alta' , formatter: (_,row) => dateFormater(row.cells[1].data) } , 'Email','DOCUMENTO','Productos','Precio',
         //'Detalle'],
@@ -69,7 +61,27 @@ class Orders extends Component  {
       this.handleClose = this.handleClose.bind(this);
    }
 
+ 
+  handleChangePage = async (newPage) => {
+    this.setState({
+      pagination_filter: (newPage)?newPage+1:1,
+      pagination_page: (newPage)?newPage:0,
+      }, async () => {
+      await this.fetchOrders();
+    });
+  }
+
+  handleChangeRowsPerPage = async (newLimit) => {
+
+    this.setState({
+      limit: (newLimit)?newLimit.target.value:10,
+      pagination_filter: 1,
+      pagination_page: 0,
+      }, async () => {
+      await this.fetchOrders();
+    });
   
+  }
 
   async onModalClick(id)  {
     const response = await axios.get(`${process.env.BOOKING_BASE_URL}/${id}`);
@@ -88,8 +100,16 @@ class Orders extends Component  {
    
    
   async fetchOrders()  {
-      const response = await axios.get(process.env.BOOKING_BASE_URL);
-      console.log("ODER CUSTOMER", response);
+      console.log('PAGINATION FILTER', this.state.pagination_filter )
+      const response = await axios.get(`${process.env.BOOKING_BASE_URL}?pagelen=${this.state.limit}&page=${this.state.pagination_filter}&status=ENTERED`);
+      
+      this.setState((state, props) => ({
+        page_next: response.data.next,
+        page_prev: response.data.prev,
+        total_items: response.data.total_items
+    }));
+      
+     
       
       
       let result = [];
@@ -131,6 +151,10 @@ class Orders extends Component  {
 
   async componentDidMount() {
       await this.fetchOrders();
+      this.handleChangePage();
+      this.handleChangeRowsPerPage();
+   
+     
   }    
 
   
@@ -146,8 +170,12 @@ class Orders extends Component  {
            search={this.state.search}
            pagination={this.state.pagination}
            limit={this.state.limit} 
-           page ={this.state.page}
+           page={this.state.pagination_page}
            onModalClick={this.onModalClick.bind(this)}
+           handleChangeRowsPerPage={this.handleChangeRowsPerPage.bind(this)}
+           handleChangePage={this.handleChangePage.bind(this)}
+           total_items={this.state.total_items}
+
            > 
            </DataGrid> 
            {<DetailModal isOpen={this.state.isOpen}  handleClose={this.handleClose.bind(this)}  order={this.state.order}></DetailModal>}

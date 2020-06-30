@@ -113,7 +113,7 @@ export default function ResponsiveDialog(props) {
                                  style={{ backgroundColor:'#ff5722' , }
                                 }
                                 titleColor='white'
-                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic',fontSize:'20px' }}                          
                                 />
                             
                                 {  console.log("ORDER: ",props.order)}
@@ -144,7 +144,7 @@ export default function ResponsiveDialog(props) {
                                  style={{ backgroundColor:'#ff5722' , }
                                 }
                                 titleColor='white'
-                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic',fontSize:'20px' }}                          
                                 />
                             <List>
                                 <ListItem>
@@ -164,7 +164,7 @@ export default function ResponsiveDialog(props) {
                                  style={{ backgroundColor:'#ff5722' , }
                                 }
                                 titleColor='white'
-                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic',fontSize:'20px' }}                          
                                 />
                             <List>
                                       <ListItem>
@@ -214,7 +214,7 @@ export default function ResponsiveDialog(props) {
                                  style={{ backgroundColor:'#ff5722' , }
                                 }
                                 titleColor='white'
-                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' , fontSize:'20px'}}                          
                                 />
                               <List>
                                   <ListItem>
@@ -244,10 +244,6 @@ export default function ResponsiveDialog(props) {
                                       <Divider variant={'inset'} component={'li'} /> 
                                   <ListItem>      
                                       <ListItemText primary={(props.order.customer)?props.order.customer.address.city:'Ciudad'} secondary={(props.order.customer)?props.order.customer.address.state:'Provincia'}>
-                                      </ListItemText>
-                                  </ListItem> 
-                                  <ListItem>      
-                                      <ListItemText primary='Ciudad' secondary='Provincia'>
                                       </ListItemText>
                                   </ListItem> 
                             </List>      
