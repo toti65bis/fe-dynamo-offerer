@@ -72,7 +72,8 @@ class Orders extends Component  {
   
 
   async onModalClick(id)  {
-    const response = await axios.get(`http://localhost:3000/order/${id}`);
+    const response = await axios.get(`${process.env.BOOKING_BASE_URL}/${id}`);
+    //const response = await axios.get(`http://192.168.0.23:3000/order/${id}`);
     this.setState((state, props) => ({
         order: response.data,
         isOpen: true
@@ -88,28 +89,43 @@ class Orders extends Component  {
    
   async fetchOrders()  {
       const response = await axios.get(process.env.BOOKING_BASE_URL);
+      console.log("ODER CUSTOMER", response);
+      
+      
       let result = [];
-      response.data[0].items.map(function(order, index){
+        
+      response.data.items.map(function(order, index){
             let products = '';
             let price = 0;
-            let documento=`${order.customer.identity.type.name}:${order.customer.identity.value}` 
+           
+
+            let documento=`${(order.customer)?order.customer.identity.type.name+':'+order.customer.identity.value:''}` 
+            
+            
             order.items.map(function(item, index){
                 products = (products==='')?`${item.product.code}`:`${products},${item.product.code}`;
                 price = price + item.price.amount; 
             })  
+            
             result.push(
-              {id: order.id, 
-                created_at: order.created_at, 
-                email:order.customer.email, 
-                document: documento, 
-                products: products, 
-                price: price, actions:''});
-
+                  {id: order.id, 
+                    created_at: (!order.customer)?'':order.created_at,   
+                    email: (!order.customer)?'':order.customer.email, 
+                    document: documento, 
+                    products: products, 
+                    quantity: (!order.customer)?order.items.length:0, 
+                    price: price, actions:''});
            
       
           });
-      this.setState({data: result
-          })    
+          
+
+          this.setState((state, props) => ({
+            data: result,
+     
+        }));
+
+        
   }
   
 
@@ -121,8 +137,8 @@ class Orders extends Component  {
   render() {
     return (
     <div>
-           <h1>This is Orders</h1> 
-           <DataGrid 
+           <h1>Ordenes Ingresadas</h1> 
+          <DataGrid 
            columns={this.state.columns} 
            data={this.state.data}  
            style={this.state.style} 
@@ -133,8 +149,8 @@ class Orders extends Component  {
            page ={this.state.page}
            onModalClick={this.onModalClick.bind(this)}
            > 
-           </DataGrid>
-           <DetailModal isOpen={this.state.isOpen}  handleClose={this.handleClose.bind(this)}  order={this.state.order}></DetailModal> 
+           </DataGrid> 
+           {<DetailModal isOpen={this.state.isOpen}  handleClose={this.handleClose.bind(this)}  order={this.state.order}></DetailModal>}
 
           
     </div>

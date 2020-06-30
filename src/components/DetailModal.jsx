@@ -8,7 +8,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Card, CardHeader } from 'material-ui';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -25,23 +24,35 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { CardHeader } from 'material-ui';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-const StyledTableCell = withStyles((theme) => ({
-  head: {
+
+const StyledCardHeader = withStyles((theme) => ({
+  root: {
     backgroundColor: '#ff5722',
     color: theme.palette.common.white,
     fontWeight: 'bold' 
   },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
+ 
+}))(CardHeader);
 
-const StyledTableRow = withStyles((theme) => ({
+
+const StyledDialogTitle = withStyles((theme) => ({
   root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
+    backgroundColor: '#ff5722',
+    color: theme.palette.common.white,
+    fontWeight: 'bold' 
+  },
+ 
+}))(DialogTitle);
+
+const StyledChip = withStyles((theme) => ({
+  root: {
+    backgroundColor: '#ff5722',
   },
 }))(TableRow);
 
@@ -57,10 +68,12 @@ const GridCustomStyle = withStyles((theme) => ({
 }))(Grid);
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
+  root: {
+    backgroundColor: 700,
   },
 });
+
+
 
 export default function ResponsiveDialog(props) {
   const classes = useStyles();
@@ -72,94 +85,190 @@ export default function ResponsiveDialog(props) {
     setOpen(false);
   };
 
-
+ 
+   
 
   return (
-    <div>
-      <Dialog
-        open={props.isOpen}
-        onClose={props.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <Paper elevation={3}>
-          <DialogTitle id="responsive-dialog-title">
-                  {`Orden #${(props.order)?props.order.id:''}`}
-          </DialogTitle>
-          <DialogContent>
-                     <Grid container spacing={2}>
-                     <Grid item xs={12}>
-                        <Paper>
-                            Productos
-                        
-                         {/*    <List>
-                              <ListItem>
-                                <ListItemText primary="Plan 1" secondary="1">
-
-                                </ListItemText>
-                                <Chip
-                                avatar={<Avatar>{'ARS'}</Avatar>}
-                                label="1200"
-                                color={'primary'}
-                              />
-                              </ListItem>
-
-                            </List> */}
-
-                            {  console.log("ORDER: ",props.order.items)}
-                            {
-                                (props.order.items) && (
-                                    props.order.items.map( item => (
-                                        /*<p>TITULO: {item.product.title}</p>*/
-                                        <ListItem>
-                                            <ListItemText primary={item.product.title} secondary={item.product.code} />
-
-                                            <Divider variant={'inset'} component={'li'} />
-                                        </ListItem>
-                                    ))
-                                )
-                            }
-                          {/*{
-
-                              props.order.items.map( (product,index) => (
-
+    <MuiThemeProvider>
+      <div>
+          <Dialog
+            open={props.isOpen}
+            onClose={props.handleClose}
+            aria-labelledby="responsive-dialog-title"
+            fullWidth={true}
+            maxWidth={'md'}
+          >
+            <Paper elevation={3}>
+              <StyledDialogTitle   id="responsive-dialog-title">
+                      {`Orden #${(props.order)?props.order.id:''}`}
+              </StyledDialogTitle>
+              <DialogContent dividers>
+                        <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <Paper>
+                              
+                            <Card>
+                              <CardContent>
+                                <CardHeader title="Productos" 
+                                 style={{ backgroundColor:'#ff5722' , }
+                                }
+                                titleColor='white'
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                />
+                            
+                                {  console.log("ORDER: ",props.order)}
+                                {
+                                    (props.order.items) && (
+                                        props.order.items.map( item => (
+                                            <List>
+                                                <ListItem>
+                                                    <ListItemText primary={`Codigo: ${item.product.title}`} secondary={`Cantidad:${props.order.items.length}`} >
+                                                    </ListItemText>
+                                                    <ListItemText primary={item.price.amount} secondary={`Total a Pagar en ${item.price.currency.iso_code}`} >
+                                                          
+                                                    </ListItemText>
+                                                </ListItem>
+                                            </List>
+                                        ))
+                                    )
+                                }
+                            </CardContent>
+                            </Card>
+                          </Paper>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                          <Paper>
+                          <Card>
+                              <CardContent>
+                                <CardHeader title="Vendedor" 
+                                 style={{ backgroundColor:'#ff5722' , }
+                                }
+                                titleColor='white'
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                />
+                            <List>
                                 <ListItem>
-                                      <ListItemText primary={product.title} secondary={product.code}>
-
+                                      <ListItemText primary={(props.order.collaborator)?props.order.collaborator.sid:''} secondary={`Codigo Vendedor`} >
                                       </ListItemText>
-                                      <Chip
-                                          avatar={<Avatar>{'ARS'}</Avatar>}
-                                          label={product.price}
-                                          color={'primary'}
-                                          deleteIcon={<AttachMoneyIcon />}
-                                        />
-                                          <Divider variant={'inset'} component={'li'} />
+                                </ListItem>
+                            </List>
+                            </CardContent>
+                            </Card> 
+                          </Paper>
+                        </Grid>
+                          <Grid item xs={12} sm={6}>
+                          <Paper>
+                          <Card>
+                              <CardContent>
+                                <CardHeader title="Titular" 
+                                 style={{ backgroundColor:'#ff5722' , }
+                                }
+                                titleColor='white'
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                />
+                            <List>
+                                      <ListItem>
+                                          <ListItemText primary={(props.order.customer)?props.order.customer.last_name +' '+props.order.customer.first_name:''} secondary='Nombre'>
+                                          </ListItemText>
+                                      </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                    {/*   <ListItem>
+                                          <ListItemText primary={(props.order.customer.identity)?props.order.customer.identity.value:''} secondary={(props.order.customer)?props.order.customer.identity.type.name:''}>
+                                          </ListItemText>
+                                      </ListItem> */}
+                                      <Divider variant={'inset'} component={'li'} />
+                                      <ListItem>
+                                          <ListItemText primary={`${(props.order.customer)?props.order.customer.email:''}`} secondary={'Email'}>
+                                          </ListItemText>
+                                      </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                      <ListItem>
+                                          <ListItemText primary={`${(props.order.customer)?props.order.customer.gender:''}`} secondary={'Sexo'}>
+                                          </ListItemText>
+                                      </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                      <ListItem>
+                                          <ListItemText primary={`${(props.order.customer)?props.order.customer.birth_date:''}`} secondary={'Fecha de Nacimiento'}>
+                                          </ListItemText>
+                                      </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                      <ListItem>
+                                          <ListItemText primary={`${(props.order.customer)?props.order.customer.nationality.name:''}`} secondary={'Nacionalidad'}>
+                                          </ListItemText>
+                                      </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                      <ListItem>
+                                          <ListItemText primary={`${(props.order.customer)?props.order.customer.type:''}`} secondary={'Tipo de Persona'}>
+                                          </ListItemText>
+                                      </ListItem>
+                            </List>          
+                             </CardContent>
+                             </Card>           
+                          </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <Paper>
+                          <Card>
+                              <CardContent>
+                                <CardHeader title="Domicilio" 
+                                 style={{ backgroundColor:'#ff5722' , }
+                                }
+                                titleColor='white'
+                                titleStyle={{textAlign: 'center', fontWeight: 'bold',  fontStyle: 'italic' }}                          
+                                />
+                              <List>
+                                  <ListItem>
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.street:''} secondary={'Calle'}>
+                                          </ListItemText>
                                   </ListItem>
-                            ))
-                          }*/}
-                             
+                                      <Divider variant={'inset'} component={'li'} />
+                                  <ListItem>  
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.number:''} secondary={'Numero'}>
+                                      </ListItemText>
+                                  </ListItem>   
+                                      <Divider variant={'inset'} component={'li'} />
+                                  <ListItem>  
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.floor:''} secondary='Piso'>
+                                      </ListItemText>
+                                  </ListItem>
+                                      <Divider variant={'inset'} component={'li'} />
+                                  <ListItem>      
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.door:''} secondary='Departamento'>
+                                      </ListItemText>
+                                  </ListItem>  
+                                      <Divider variant={'inset'} component={'li'} />
+                                  <ListItem>      
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.zip_code:''} secondary='Codigo Postal'>
+                                      </ListItemText>
+                                  </ListItem> 
+                                      <Divider variant={'inset'} component={'li'} /> 
+                                  <ListItem>      
+                                      <ListItemText primary={(props.order.customer)?props.order.customer.address.city:'Ciudad'} secondary={(props.order.customer)?props.order.customer.address.state:'Provincia'}>
+                                      </ListItemText>
+                                  </ListItem> 
+                                  <ListItem>      
+                                      <ListItemText primary='Ciudad' secondary='Provincia'>
+                                      </ListItemText>
+                                  </ListItem> 
+                            </List>      
+                          </CardContent>
+                          </Card>
+                        </Paper>
                         
-                      </Paper>
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                      <Paper>Titular</Paper>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Paper>Vendedor</Paper>
-                    </Grid>
-                     </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={props.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={props.handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
-          </DialogActions> 
+                        </Grid>
+                      
+                        </Grid>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={props.handleClose} color="primary" autoFocus>
+                  Cerrar
+                </Button>
+              </DialogActions> 
 
-        </Paper>
-  
-      </Dialog>
+            </Paper>
+      
+          </Dialog>
     </div>
+    </MuiThemeProvider>
   );
 }

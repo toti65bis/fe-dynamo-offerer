@@ -34,20 +34,7 @@ const Header = (props) => {
     isRegister,
   });
 
-  useEffect(() => {
-
-    
-    /*
-    getSession()
-      .then(session => {
-        setStatus(true);
-        setNickName(session.idToken.payload.nickname);
-        setEmail(session.email);
-      })
-      */
-  }, []);
-
-
+  
   return (
     <header className={headerClass}>
       <Link to='/'>
