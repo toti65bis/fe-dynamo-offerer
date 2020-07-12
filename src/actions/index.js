@@ -29,11 +29,15 @@ export const setFavorite = payload => ({
     payload,
   });
 
-  /*export const getUser = payload => ({
-    type: 'GET_USER',
-    payload,
-  });*/
 
+  export const getAuthState = () => (dispatch, getState) => {
+    const { state } = getState().state;
+      dispatch({
+        type: 'GET_STATE',
+        payload: state
+      });
+  };
+  
   export const getUser = () => (dispatch, getState) => {
 
     const { user } = getState().user;
@@ -44,7 +48,3 @@ export const setFavorite = payload => ({
       });
   }
 
-  /*export const getState = () => ({
-    type: 'GET_STATE'
-  });*/
-  

@@ -1,23 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import * as serviceWorker from './serviceWorker';
-import App from './App.jsx';
 import { Provider } from 'react-redux';
-import { createStore, compose } from 'redux';
-import reducer from './reducers';
+import App from './App';
+import createStore from './store/createStore';
 
-const initialState = {
-  user: {}
-};
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducer, initialState, composeEnhancers());
+const store = createStore();
+// config.group = 'admins'; // Uncomment this to require users to be in a group 'admins'
+//setupCognito(store, config);
 
 
 ReactDOM.render(
   <Provider  store={store}>
-    <App />
+      <App />
   </Provider>,
   document.getElementById('root')
 );
@@ -25,4 +19,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+//serviceWorker.unregister();
